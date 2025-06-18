@@ -61,6 +61,8 @@ export function BrainPoints({
     }
   });
 
+  if (!geometry) return null;
+
   return (
     <group ref={group} scale={0.5}>
       <points geometry={geometry} material={material} />
