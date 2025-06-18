@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
-import React, { Suspense, useEffect, useState } from 'react';
+import { Html, OrbitControls, useGLTF } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Html, useGLTF } from '@react-three/drei';
+import { Suspense, useEffect, useState } from 'react';
 
 type Region = {
   id: string;
@@ -17,7 +17,7 @@ type BrainMapProps = {
 };
 
 function BrainModel() {
-  const { scene } = useGLTF<GLTF>('/models/brain.glb');
+  const { scene } = useGLTF('/models/brain.glb');
   return <primitive object={scene} scale={0.03} />;
 }
 
