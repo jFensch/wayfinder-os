@@ -16,8 +16,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          if (id.includes('@react-three')) return 'r3f';
           if (id.includes('three')) return 'three';
-          if (id.includes('@react-three')) return 'three';
         },
       },
     },
