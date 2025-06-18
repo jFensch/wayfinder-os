@@ -18,11 +18,28 @@ Wayfinder OS is an interactive web demo that visualizes the lived experience of 
 
 ## ✨ Features
 
-- **State Toggles**: Switch between `Flow`, `Anxious`, `Sad`, and `Shutdown` modes  
-- **Animated Regions**: Regions resize, recolor, and pulse to reflect each state  
-- **Poetic Tooltips**: Hover any region to see its metaphorical description  
-- **Custom Behaviors**: DMN expands in “Sad” mode, anxiety glows in red, etc.  
-- **Bun-Powered**: Fast startup and development with Bun, React, TypeScript, and Tailwind  
+- **State Toggles**: Switch between `Flow`, `Anxious`, `Sad`, and `Shutdown` modes.
+- **Dynamic Visualization**: Brain regions and neural pathways animate in response to the selected state.
+- **Interactive Exploration**: Click on any region to learn about its function and metaphorical role.
+- **Poetic Tooltips**: Hover any region to see its metaphorical description.
+- **State-Driven Behaviors**:
+  - **Anxious**: Amygdala glows and pulses, overall activity is heightened.
+  - **Flow**: Frontal lobes are highlighted, with smooth, connected energy patterns.
+  - **Sad**: The Default Mode Network (DMN) is more prominent, colors are muted.
+  - **Shutdown**: Overall brain activity is significantly dimmed.
+- **Bun-Powered**: Fast startup and development with Bun, React, TypeScript, and Tailwind.
+
+---
+
+## 🗺️ Roadmap
+
+Our goal is to create a deeply interactive and educational experience. The current sprint focuses on:
+
+1.  **Implementing State-Driven Animations**: Bringing the brain to life with dynamic visuals for each state.
+2.  **Displaying Region Information**: Adding a panel to show details about selected brain regions.
+3.  **Code Refactoring**: Ensuring the codebase remains clean and maintainable.
+
+See the full [Sprint Plan](./docs/sprint-plan.md) for more details.
 
 ---
 

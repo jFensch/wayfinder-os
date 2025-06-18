@@ -10,7 +10,11 @@ The initial release of Wayfinder OS aims to provide an interactive visualization
    - *As a visitor,* I expect brain regions to resize, recolor and pulse to reflect the selected state.
 3. **Informative tooltips**
    - *As a visitor,* I want to hover over a region and read a short description that poetically explains its role.
-4. **Fast start and development**
+4. **Display region details**
+   - *As a visitor,* I want to click on a brain region and see its name, role, and a detailed description in a dedicated panel.
+5. **Clear selection**
+   - *As a visitor,* I want to be able to deselect a region to hide the details panel.
+6. **Fast start and development**
    - *As a developer,* I need a quick development workflow powered by Bun, Vite and React.
 
 ## Non-Functional Requirements
