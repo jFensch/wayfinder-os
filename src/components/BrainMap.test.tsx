@@ -68,4 +68,40 @@ describe('BrainMap', () => {
     expect(screen.getByText('Amygdala')).toBeInTheDocument();
     expect(screen.getByText('fear center')).toBeInTheDocument();
   });
+
+  it('displays info panel on click and hides on deselect', async () => {
+    fetchMock.mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          regions: [
+            {
+              id: 'r2',
+              name: 'Hippocampus',
+              role: 'memory',
+              color: '#0f0',
+              position: [0, 0, 0],
+              tooltip: 'memory maker',
+            },
+          ],
+        }),
+    });
+
+    const { container } = render(<BrainMap activeState="Flow" />);
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalled();
+    });
+
+    const mesh = container.querySelector('mesh[name="region-hitbox"]');
+    expect(mesh).toBeTruthy();
+    if (mesh) {
+      fireEvent.click(mesh);
+    }
+
+    expect(screen.getAllByText('Hippocampus').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('memory maker').length).toBeGreaterThan(0);
+    expect(screen.getByText('Deselect')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Deselect'));
+    expect(screen.queryByText('Deselect')).not.toBeInTheDocument();
+  });
 });
