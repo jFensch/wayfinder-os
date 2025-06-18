@@ -7,6 +7,7 @@ vi.mock('@react-three/fiber', () => ({
   Canvas: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
+  useFrame: vi.fn(),
 }));
 
 vi.mock('@react-three/drei', () => ({
