@@ -59,11 +59,11 @@ describe('BrainMap', () => {
       expect(fetchMock).toHaveBeenCalled();
     });
 
-    const mesh = container.querySelector('mesh[name="region-hitbox"]');
+    const mesh = await waitFor(() =>
+      container.querySelector('mesh[name="region-hitbox"]')
+    );
     expect(mesh).toBeTruthy();
-    if (mesh) {
-      fireEvent.pointerOver(mesh);
-    }
+    fireEvent.pointerOver(mesh!);
 
     expect(screen.getByText('Amygdala')).toBeInTheDocument();
     expect(screen.getByText('fear center')).toBeInTheDocument();
@@ -91,11 +91,11 @@ describe('BrainMap', () => {
       expect(fetchMock).toHaveBeenCalled();
     });
 
-    const mesh = container.querySelector('mesh[name="region-hitbox"]');
+    const mesh = await waitFor(() =>
+      container.querySelector('mesh[name="region-hitbox"]')
+    );
     expect(mesh).toBeTruthy();
-    if (mesh) {
-      fireEvent.click(mesh);
-    }
+    fireEvent.click(mesh!);
 
     expect(screen.getAllByText('Hippocampus').length).toBeGreaterThan(0);
     expect(screen.getAllByText('memory maker').length).toBeGreaterThan(0);
