@@ -39,3 +39,9 @@ Wayfinder OS is an interactive web demo that visualizes the lived experience of 
 git clone https://github.com/jFensch/wayfinder-os.git
 cd wayfinder-os
 ./setup.sh
+
+### Running Tests
+
+```bash
+bun run test
+```
