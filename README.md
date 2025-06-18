@@ -6,7 +6,7 @@
 
 **A Live Neural Map of a Poetic Systems Engineer**
 
-Wayfinder OS is an interactive web demo that visualizes the lived experience of a neurodivergent mind. It turns emotional states into immersive, shareable insight through animated brain regions, state toggles, and poetic tooltips.
+Wayfinder OS is an interactive web demo that visualizes the lived experience of a neurodivergent mind. It turns emotional states into immersive, shareable insight through animated brain regions, state toggles, and simple hover tooltips.
 
 ---
 
@@ -21,13 +21,15 @@ Wayfinder OS is an interactive web demo that visualizes the lived experience of 
 - **State Toggles**: Switch between `Flow`, `Anxious`, `Sad`, and `Shutdown` modes.
 - **Dynamic Visualization**: Brain regions and neural pathways animate in response to the selected state.
 - **Interactive Exploration**: Click on any region to learn about its function and metaphorical role.
-- **Poetic Tooltips**: Hover any region to see its metaphorical description.
+- **Region Name Tooltips**: Hover over a region to see its name; click for the full description.
 - **State-Driven Behaviors**:
   - **Anxious**: Amygdala glows and pulses, overall activity is heightened.
   - **Flow**: Frontal lobes are highlighted, with smooth, connected energy patterns.
   - **Sad**: The Default Mode Network (DMN) is more prominent, colors are muted.
   - **Shutdown**: Overall brain activity is significantly dimmed.
 - **Bun-Powered**: Fast startup and development with Bun, React, TypeScript, and Tailwind.
+- **Optimized Bundles**: Heavy 3D components load lazily to keep initial downloads small.
+- **Responsive Visualization**: Tooltips scale for readability and the neural map maximizes vertical space on larger screens.
 
 ---
 

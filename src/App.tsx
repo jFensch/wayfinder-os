@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrainMap } from './components/BrainMap';
+import React, { Suspense } from 'react';
+const BrainMap = React.lazy(() => import('./components/BrainMap'));
 import { StateController } from './components/StateController';
 
 export default function App() {
@@ -14,7 +14,9 @@ export default function App() {
         activeState={activeState}
         setActiveState={setActiveState}
       />
-      <BrainMap activeState={activeState} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <BrainMap activeState={activeState} />
+      </Suspense>
     </div>
   );
 }
