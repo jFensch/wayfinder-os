@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrainMap } from './components/BrainMap';
-import { AppState } from './components/highlightRegions';
+import type { BrainState } from './components/highlightRegions';
+  const [activeState, setActiveState] = React.useState<BrainState>('Flow');
 import { StateController } from './components/StateController';
 
 export default function App() {

@@ -3,7 +3,7 @@ import { Html, useGLTF } from '@react-three/drei';
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { highlightRegions } from './highlightRegions';
+import { highlightRegions, type BrainState } from './highlightRegions';
 
 type Region = {
   id: string;
@@ -16,7 +16,7 @@ type Region = {
 
 type Props = {
   region: Region;
-  activeState: string;
+  activeState: BrainState;
   hovered: string | null;
   selected: string | null;
   setHovered: (id: string | null) => void;

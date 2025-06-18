@@ -1,7 +1,8 @@
 import React from 'react';
-import { AppState } from './highlightRegions';
-
-type StateControllerProps = {
+import type { BrainState } from './highlightRegions';
+  activeState: BrainState;
+  setActiveState: (state: BrainState) => void;
+const states: BrainState[] = ['Flow', 'Anxious', 'Sad', 'Shutdown'];
   activeState: AppState;
   setActiveState: React.Dispatch<React.SetStateAction<AppState>>;
 };

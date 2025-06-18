@@ -3,8 +3,10 @@ import { OrbitControls, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { createPointsGeometry } from './createPointsGeometry';
 import { RegionMarker } from './RegionMarker';
-    return createPointsGeometry(mesh, count);
-    let opacity = isHoverSel ? 0.6 : 0.25;
+import type { BrainState } from './highlightRegions';
+
+  activeState: BrainState;
+  activeState: BrainState;
     let emissiveIntensity = isHoverSel ? 0.4 : 0.1;
 
     switch (activeState) {
