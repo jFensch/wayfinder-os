@@ -17,7 +17,7 @@ type BrainMapProps = {
 };
 
 function BrainModel() {
-  const { scene } = useGLTF('/models/brain.glb');
+  const { scene } = useGLTF<GLTF>('/models/brain.glb');
   return <primitive object={scene} scale={0.03} />;
 }
 
