@@ -118,7 +118,12 @@ function RegionMarker({
   setHovered,
   setSelected,
 }: RegionMarkerProps) {
+  const { nodes } = useGLTF('/models/brain.glb');
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+
+  const mesh = nodes[
+    `${region.id.charAt(0).toUpperCase()}${region.id.slice(1)}`
+  ] as THREE.Mesh | undefined;
 
   const isHighlighted = highlightRegions[activeState]?.includes(region.id);
   const isHoverSel = hovered === region.id || selected === region.id;
@@ -173,31 +178,28 @@ function RegionMarker({
     }
   });
 
+  if (!mesh) return null;
+
   return (
-    <group position={region.position}>
-      <mesh
-        name="region-hitbox"
-        visible={false}
-        onPointerOver={() => setHovered(region.id)}
-        onPointerOut={() => setHovered(null)}
-        onClick={() => setSelected(region.id)}
-      >
-        <sphereGeometry args={[0.15, 32, 32]} />
-        <meshBasicMaterial transparent opacity={0} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[0.18, 32, 32]} />
-        <meshStandardMaterial
-          ref={materialRef}
-          color={style.color}
-          transparent
-          opacity={style.opacity}
-          emissive={style.color}
-          emissiveIntensity={style.emissiveIntensity}
-        />
-      </mesh>
+    <mesh
+      geometry={mesh.geometry}
+      position={[mesh.position.x, mesh.position.y, mesh.position.z]}
+      rotation={[mesh.rotation.x, mesh.rotation.y, mesh.rotation.z]}
+      scale={[mesh.scale.x, mesh.scale.y, mesh.scale.z]}
+      onPointerOver={() => setHovered(region.id)}
+      onPointerOut={() => setHovered(null)}
+      onClick={() => setSelected(region.id)}
+    >
+      <meshStandardMaterial
+        ref={materialRef}
+        color={style.color}
+        transparent
+        opacity={style.opacity}
+        emissive={style.color}
+        emissiveIntensity={style.emissiveIntensity}
+      />
       {(hovered === region.id || selected === region.id) && (
-        <Html distanceFactor={10} className="pointer-events-none">
+        <Html distanceFactor={8} transform className="pointer-events-none">
           <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-xs">
             <strong>{region.name}</strong>
             <br />
@@ -206,7 +208,7 @@ function RegionMarker({
           </div>
         </Html>
       )}
-    </group>
+    </mesh>
   );
 }
 
