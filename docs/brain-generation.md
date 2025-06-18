@@ -87,6 +87,20 @@ The generated model includes:
 3. **Test** the application with synchronized data
 4. **Commit** only the generation script, not the generated files
 
+## CI/CD Integration
+
+The build system automatically generates the required files:
+
+- **Development**: `npm run dev` generates files before starting
+- **Build**: `npm run build` generates files before building
+- **CI**: `npm run ci` generates files before all checks
+
+This ensures that:
+- ✅ Generated files are always available when needed
+- ✅ No manual file generation required in CI/CD
+- ✅ Files stay out of version control
+- ✅ Builds work in any environment
+
 ## Benefits
 
 - ✅ **Always Synchronized** - 3D model and data never drift apart
