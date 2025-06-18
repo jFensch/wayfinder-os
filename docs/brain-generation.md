@@ -4,7 +4,7 @@ This project uses a synchronized approach for generating both the 3D brain model
 
 ## Overview
 
-Both the `brain.glb` 3D model and `brain-map.json` data file are **generated automatically** and are synchronized to ensure consistency between the visual representation and the interactive data.
+Both the `brain.glb` 3D model and `brain-map.json` data file are **generated automatically** and are synchronized to ensure consistency between the visual representation and the interactive data. The model mesh itself is copied from the open-source **threejs-brain-animation** package so that no network downloads are required.
 
 ## Generated Files
 

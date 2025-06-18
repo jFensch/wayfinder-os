@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
-import { mkdirSync, writeFileSync } from 'fs';
+import { mkdirSync, writeFileSync, copyFileSync } from 'fs';
 import { dirname, join } from 'path';
 import * as THREE from 'three';
-import { GLTFExporter } from 'three-stdlib';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const require = createRequire(import.meta.url);
+const sourceModelPath = require.resolve('threejs-brain-animation/dist/static/brain.glb');
 
 // Create a simple brain-like model
 function createBrainModel() {
@@ -299,83 +301,25 @@ function createBrainModel() {
 }
 
 // Create scene and export
-function generateBrainGLB() {
-  const scene = new THREE.Scene();
-
-  // Add the brain model
+function generateBrainAssets() {
   const brain = createBrainModel();
-  scene.add(brain);
+  const modelsDir = join(__dirname, '..', 'public', 'models');
+  mkdirSync(modelsDir, { recursive: true });
 
-  // Add some basic lighting info (will be ignored in GLB but good practice)
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(5, 5, 5);
+  // Copy the realistic brain model from node_modules
+  const outputPath = join(modelsDir, 'brain.glb');
+  copyFileSync(sourceModelPath, outputPath);
 
-  scene.add(ambientLight);
-  scene.add(directionalLight);
+  const brainMapData = generateBrainMapJSON(brain);
+  const brainMapPath = join(__dirname, '..', 'public', 'brain-map.json');
+  writeFileSync(brainMapPath, JSON.stringify(brainMapData, null, 2));
 
-  // Export to GLB
-  const exporter = new GLTFExporter();
-
-  exporter.parse(
-    scene,
-    function (result) {
-      // Ensure the public/models directory exists
-      const modelsDir = join(__dirname, '..', 'public', 'models');
-      mkdirSync(modelsDir, { recursive: true });
-
-      // Write the GLB file
-      const outputPath = join(modelsDir, 'brain.glb');
-      writeFileSync(outputPath, new Uint8Array(result));
-
-      // Generate and write brain-map.json
-      const brainMapData = generateBrainMapJSON(brain);
-      const brainMapPath = join(__dirname, '..', 'public', 'brain-map.json');
-      writeFileSync(brainMapPath, JSON.stringify(brainMapData, null, 2));
-
-      // eslint-disable-next-line no-console
-      console.log('✅ Brain model generated successfully!');
-      // eslint-disable-next-line no-console
-      console.log(`📁 GLB saved to: ${outputPath}`);
-      // eslint-disable-next-line no-console
-      console.log(`📋 JSON saved to: ${brainMapPath}`);
-      // eslint-disable-next-line no-console
-      console.log('🧠 The brain model includes:');
-      // eslint-disable-next-line no-console
-      console.log('   - Left and right hemispheres');
-      // eslint-disable-next-line no-console
-      console.log('   - Brain stem (midbrain, pons, medulla)');
-      // eslint-disable-next-line no-console
-      console.log('   - Cerebellum');
-      // eslint-disable-next-line no-console
-      console.log('   - Corpus callosum (hemisphere bridge)');
-      // eslint-disable-next-line no-console
-      console.log('   - Thalamus (left & right)');
-      // eslint-disable-next-line no-console
-      console.log('   - Hippocampus (memory centers)');
-      // eslint-disable-next-line no-console
-      console.log('   - Amygdala (emotion centers)');
-      // eslint-disable-next-line no-console
-      console.log('   - Pituitary gland');
-      // eslint-disable-next-line no-console
-      console.log('   - Frontal lobes (executive function)');
-      // eslint-disable-next-line no-console
-      console.log('   - Occipital lobes (visual processing)');
-      // eslint-disable-next-line no-console
-      console.log('   - Surface detail (cortical folds)');
-      // eslint-disable-next-line no-console
-      console.log('🔄 Brain-map.json synchronized with 3D model');
-    },
-    function (error) {
-      // eslint-disable-next-line no-console
-      console.error('❌ Error generating brain model:', error);
-    },
-    {
-      binary: true,
-      embedImages: true,
-      includeCustomExtensions: false,
-    }
-  );
+  // eslint-disable-next-line no-console
+  console.log('✅ Brain assets prepared!');
+  // eslint-disable-next-line no-console
+  console.log(`📁 GLB copied to: ${outputPath}`);
+  // eslint-disable-next-line no-console
+  console.log(`📋 JSON saved to: ${brainMapPath}`);
 }
 
 // Function to generate brain-map.json from the 3D model
@@ -524,5 +468,5 @@ function generateBrainMapJSON(brain) {
 
 // Run the generator
 // eslint-disable-next-line no-console
-console.log('🔧 Generating brain 3D model...');
-generateBrainGLB();
+console.log('🔧 Preparing brain assets...');
+generateBrainAssets();

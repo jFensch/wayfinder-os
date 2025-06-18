@@ -18,7 +18,7 @@ type BrainMapProps = {
 
 function BrainModel() {
   const { scene } = useGLTF('/models/brain.glb');
-  return <primitive object={scene} scale={0.03} />;
+  return <primitive object={scene} scale={0.5} />;
 }
 
 export function BrainMap({ activeState: _activeState }: BrainMapProps) {
@@ -36,8 +36,10 @@ export function BrainMap({ activeState: _activeState }: BrainMapProps) {
     <div className="bg-gray-800 p-6 rounded shadow-xl h-96">
       <h2 className="text-xl font-semibold mb-2">Neural Visualization</h2>
       <Canvas camera={{ position: [0, 0, 3] }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[2, 2, 2]} />
+        <ambientLight intensity={0.6} />
+        <hemisphereLight intensity={0.4} groundColor="black" />
+        <directionalLight position={[5, 5, 5]} intensity={0.8} />
+        <directionalLight position={[-5, -5, -5]} intensity={0.3} />
         <Suspense fallback={null}>
           <BrainModel />
           {regions.map((region) => (
@@ -63,7 +65,7 @@ export function BrainMap({ activeState: _activeState }: BrainMapProps) {
             </mesh>
           ))}
         </Suspense>
-        <OrbitControls />
+        <OrbitControls enablePan enableZoom enableRotate />
       </Canvas>
     </div>
   );
