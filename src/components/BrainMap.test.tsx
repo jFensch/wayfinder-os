@@ -59,7 +59,7 @@ describe('BrainMap', () => {
       expect(fetchMock).toHaveBeenCalled();
     });
 
-    const mesh = container.querySelector('mesh[data-testid="region-hitbox"]');
+    const mesh = container.querySelector('mesh[name="region-hitbox"]');
     expect(mesh).toBeTruthy();
     if (mesh) {
       fireEvent.pointerOver(mesh);

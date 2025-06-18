@@ -105,7 +105,7 @@ export function BrainMap({ activeState: _activeState }: BrainMapProps) {
           {regions.map((region) => (
             <group key={region.id} position={region.position}>
               <mesh
-                data-testid="region-hitbox"
+                name="region-hitbox"
                 visible={false}
                 onPointerOver={() => setHovered(region.id)}
                 onPointerOut={() => setHovered(null)}
