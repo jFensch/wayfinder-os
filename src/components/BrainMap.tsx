@@ -46,7 +46,7 @@ export function BrainMap({ activeState }: BrainMapProps) {
 
   return (
     <div
-      className="bg-gray-800 p-6 rounded shadow-xl h-[32rem] relative flex flex-col"
+      className="bg-gray-800 p-6 rounded shadow-xl min-h-[32rem] lg:h-[70vh] relative flex flex-col"
       role="button"
       tabIndex={0}
       onClick={() => setSelected(null)}
@@ -113,7 +113,7 @@ export function BrainMap({ activeState }: BrainMapProps) {
                       distanceFactor={6}
                       className="pointer-events-none"
                     >
-                      <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-xs break-words">
+                      <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-sm break-words">
                         <strong>{region.name}</strong>
                         <br />
                         {region.role}

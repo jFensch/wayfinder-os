@@ -24,5 +24,5 @@ The initial release of Wayfinder OS aims to provide an interactive visualization
 - All region data is stored in `public/brain-map.json` for easy modification.
 - The application is written in TypeScript and styled using Tailwind CSS.
 - Tests use Vitest and Testing Library.
-- Visualization layout is responsive so the neural map fills available space.
+- Visualization layout is responsive so the neural map fills available space and expands vertically on large screens.
 - Tooltips remain legible at different zoom levels.
