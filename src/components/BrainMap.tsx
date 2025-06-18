@@ -81,7 +81,7 @@ export function BrainPoints({
   );
 }
 
-export function BrainMap({ activeState }: BrainMapProps) {
+export function BrainMap({ activeState: _activeState }: BrainMapProps) {
   const [regions, setRegions] = useState<Region[]>([]);
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
@@ -101,17 +101,33 @@ export function BrainMap({ activeState }: BrainMapProps) {
         <directionalLight position={[5, 5, 5]} intensity={0.8} />
         <directionalLight position={[-5, -5, -5]} intensity={0.3} />
         <Suspense fallback={null}>
-          <BrainPoints activeState={activeState} />
+          <primitive object={useGLTF('/models/brain.glb').scene} scale={1.2} />
           {regions.map((region) => (
-            <mesh
-              key={region.id}
-              position={region.position}
-              onPointerOver={() => setHovered(region.id)}
-              onPointerOut={() => setHovered(null)}
-              onClick={() => setSelected(region.id)}
-            >
-              <sphereGeometry args={[0.1, 32, 32]} />
-              <meshStandardMaterial color={region.color} />
+            <group key={region.id} position={region.position}>
+              <mesh
+                data-testid="region-hitbox"
+                visible={false}
+                onPointerOver={() => setHovered(region.id)}
+                onPointerOut={() => setHovered(null)}
+                onClick={() => setSelected(region.id)}
+              >
+                <sphereGeometry args={[0.15, 32, 32]} />
+                <meshBasicMaterial transparent opacity={0} />
+              </mesh>
+              <mesh>
+                <sphereGeometry args={[0.18, 32, 32]} />
+                <meshStandardMaterial
+                  color={region.color}
+                  transparent
+                  opacity={
+                    hovered === region.id || selected === region.id ? 0.6 : 0.25
+                  }
+                  emissive={region.color}
+                  emissiveIntensity={
+                    hovered === region.id || selected === region.id ? 0.4 : 0.1
+                  }
+                />
+              </mesh>
               {(hovered === region.id || selected === region.id) && (
                 <Html distanceFactor={10} className="pointer-events-none">
                   <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-xs">
@@ -122,7 +138,7 @@ export function BrainMap({ activeState }: BrainMapProps) {
                   </div>
                 </Html>
               )}
-            </mesh>
+            </group>
           ))}
         </Suspense>
         <OrbitControls enablePan enableZoom enableRotate />
