@@ -1,11 +1,12 @@
 import React from 'react';
+import { AppState } from './highlightRegions';
 
 type StateControllerProps = {
-  activeState: string;
-  setActiveState: (state: string) => void;
+  activeState: AppState;
+  setActiveState: React.Dispatch<React.SetStateAction<AppState>>;
 };
 
-const states = ['Flow', 'Anxious', 'Sad', 'Shutdown'];
+const states: AppState[] = ['Flow', 'Anxious', 'Sad', 'Shutdown'];
 
 export function StateController({
   activeState,

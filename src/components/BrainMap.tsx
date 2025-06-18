@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unknown-property */
 import { Html, OrbitControls, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { MeshSurfaceSampler } from 'three-stdlib';
-import { highlightRegions } from './highlightRegions';
+import { AppState, highlightRegions, HighlightState } from './highlightRegions';
 
 type Region = {
   id: string;
@@ -16,7 +16,7 @@ type Region = {
 };
 
 type BrainMapProps = {
-  activeState: string;
+  activeState: AppState;
 };
 
 export function BrainPoints({
@@ -24,7 +24,7 @@ export function BrainPoints({
   activeState,
 }: {
   count?: number;
-  activeState: string;
+  activeState: AppState;
 }) {
   const { nodes, scene } = useGLTF('/models/brain.glb');
   const group = useRef<THREE.Group>(null);
@@ -103,7 +103,7 @@ export function BrainPoints({
 
 type RegionMarkerProps = {
   region: Region;
-  activeState: string;
+  activeState: AppState;
   hovered: string | null;
   selected: string | null;
   setHovered: (id: string | null) => void;
@@ -125,7 +125,9 @@ function RegionMarker({
     `${region.id.charAt(0).toUpperCase()}${region.id.slice(1)}`
   ] as THREE.Mesh | undefined;
 
-  const isHighlighted = highlightRegions[activeState]?.includes(region.id);
+  const isHighlighted = highlightRegions[
+    activeState as HighlightState
+  ]?.includes(region.id);
   const isHoverSel = hovered === region.id || selected === region.id;
 
   const style = useMemo(() => {

@@ -33,3 +33,11 @@ Transform the application from a static model viewer into a dynamic, interactive
 - **Acceptance Criteria:**
   - `README.md` is updated with new features.
   - `docs/requirements.md` includes the new functional requirements.
+
+### 5. Optimize Bundle Splitting and Performance
+- **Description:** Address large chunk warnings by code-splitting and configuring build optimizations.
+- **Acceptance Criteria:**
+  - Dynamic `import()` used to lazy-load heavy components or modules.
+  - Vite/Rollup configured with `build.rollupOptions.output.manualChunks` to control chunk boundaries.
+  - `build.chunkSizeWarningLimit` adjusted to suit project needs and suppress non-critical warnings.
+  - Bundle size reduced below 500 kB per chunk where feasible.
