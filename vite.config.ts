@@ -8,7 +8,18 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/setupTests.ts',
-    exclude: [...configDefaults.exclude, 'e2e/**']
+    exclude: [...configDefaults.exclude, 'e2e/**'],
   },
-  server: { port: 3000 }
+  server: { port: 3000 },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('three')) return 'three';
+          if (id.includes('@react-three')) return 'three';
+        },
+      },
+    },
+  },
 });
