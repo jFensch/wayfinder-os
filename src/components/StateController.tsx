@@ -1,13 +1,16 @@
-import React from "react";
+import React from 'react';
 
 type StateControllerProps = {
   activeState: string;
   setActiveState: (state: string) => void;
 };
 
-const states = ["Flow", "Anxious", "Sad", "Shutdown"];
+const states = ['Flow', 'Anxious', 'Sad', 'Shutdown'];
 
-export function StateController({ activeState, setActiveState }: StateControllerProps) {
+export function StateController({
+  activeState,
+  setActiveState,
+}: StateControllerProps) {
   return (
     <div className="mb-6">
       <h2 className="text-xl font-semibold mb-2">Select State</h2>
@@ -17,7 +20,7 @@ export function StateController({ activeState, setActiveState }: StateController
             key={state}
             onClick={() => setActiveState(state)}
             className={`px-4 py-2 rounded border transition-colors duration-300 ease-in-out ${
-              activeState === state ? "bg-teal-500" : "bg-gray-700"
+              activeState === state ? 'bg-teal-500' : 'bg-gray-700'
             }`}
           >
             {state}
