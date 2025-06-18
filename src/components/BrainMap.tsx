@@ -110,10 +110,10 @@ export function BrainMap({ activeState }: BrainMapProps) {
                   {(hovered === region.id || selected === region.id) && (
                     <Html
                       sprite
-                      distanceFactor={4}
+                      distanceFactor={6}
                       className="pointer-events-none"
                     >
-                      <div className="bg-black bg-opacity-75 text-white text-sm p-2 rounded max-w-sm">
+                      <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-xs break-words">
                         <strong>{region.name}</strong>
                         <br />
                         {region.role}
