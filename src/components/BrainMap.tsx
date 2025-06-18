@@ -3,6 +3,18 @@ import { Html, OrbitControls, useGLTF } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useState, useMemo } from 'react';
 
+const highlightMap: Record<string, string[]> = {
+  Anxious: ['leftAmygdala', 'rightAmygdala'],
+  Flow: ['leftFrontalLobe', 'rightFrontalLobe'],
+};
+
+const baseOpacityMap: Record<string, number> = {
+  Flow: 0.25,
+  Anxious: 0.25,
+  Sad: 0.15,
+  Shutdown: 0.1,
+};
+
 type Region = {
   id: string;
   name: string;
@@ -17,17 +29,6 @@ type BrainMapProps = {
 };
 
 export function BrainMap({ activeState }: BrainMapProps) {
-  const highlightMap: Record<string, string[]> = {
-    Anxious: ['leftAmygdala', 'rightAmygdala'],
-    Flow: ['leftFrontalLobe', 'rightFrontalLobe'],
-  };
-
-  const baseOpacityMap: Record<string, number> = {
-    Flow: 0.25,
-    Anxious: 0.25,
-    Sad: 0.15,
-    Shutdown: 0.1,
-  };
   const [regions, setRegions] = useState<Region[]>([]);
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
