@@ -96,8 +96,9 @@ __tests__/coverage/
 # Storybook build outputs
 storybook-static/
 
-# 3D models
+# 3D models and generated data
 public/models/*.glb
+public/brain-map.json
 
 # Local development
 .turbo/
@@ -110,3 +111,4 @@ public/models/*.glb
 *.njsproj
 *.sln
 *.sw?
+public/brain-map.json
