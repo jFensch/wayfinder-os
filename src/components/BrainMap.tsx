@@ -4,6 +4,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { MeshSurfaceSampler } from 'three-stdlib';
+import { highlightRegions } from './highlightRegions';
 
 type Region = {
   id: string;
@@ -65,6 +66,24 @@ export function BrainPoints({
     []
   );
 
+  const targetColor = useRef(new THREE.Color('#ffffff'));
+
+  useEffect(() => {
+    switch (activeState) {
+      case 'Sad':
+        targetColor.current.set('#5566aa');
+        break;
+      case 'Shutdown':
+        targetColor.current.set('#333333');
+        break;
+      case 'Anxious':
+        targetColor.current.set('#ff6666');
+        break;
+      default:
+        targetColor.current.set('#ffffff');
+    }
+  }, [activeState]);
+
   useFrame(({ clock }) => {
     if (group.current) {
       group.current.rotation.y += 0.002;
@@ -72,6 +91,7 @@ export function BrainPoints({
         material.size = 0.02 + Math.sin(clock.getElapsedTime() * 2) * 0.005;
       }
     }
+    material.color.lerp(targetColor.current, 0.1);
   });
 
   return (
@@ -81,7 +101,116 @@ export function BrainPoints({
   );
 }
 
-export function BrainMap({ activeState: _activeState }: BrainMapProps) {
+type RegionMarkerProps = {
+  region: Region;
+  activeState: string;
+  hovered: string | null;
+  selected: string | null;
+  setHovered: (id: string | null) => void;
+  setSelected: (id: string | null) => void;
+};
+
+function RegionMarker({
+  region,
+  activeState,
+  hovered,
+  selected,
+  setHovered,
+  setSelected,
+}: RegionMarkerProps) {
+  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+
+  const isHighlighted = highlightRegions[activeState]?.includes(region.id);
+  const isHoverSel = hovered === region.id || selected === region.id;
+
+  const style = useMemo(() => {
+    let color = region.color;
+    let opacity = isHoverSel ? 0.6 : 0.25;
+    let emissiveIntensity = isHoverSel ? 0.4 : 0.1;
+
+    switch (activeState) {
+      case 'Anxious':
+        if (isHighlighted) {
+          color = '#ff6666';
+          emissiveIntensity = 0.8;
+        } else {
+          color = '#884444';
+          emissiveIntensity *= 0.3;
+          opacity *= 0.8;
+        }
+        break;
+      case 'Flow':
+        if (isHighlighted) {
+          color = '#66ffb2';
+          emissiveIntensity = 0.6;
+        }
+        break;
+      case 'Sad':
+        color = '#6a7bd1';
+        emissiveIntensity *= 0.2;
+        opacity *= 0.7;
+        break;
+      case 'Shutdown':
+        color = '#333333';
+        emissiveIntensity *= 0.05;
+        opacity *= 0.4;
+        break;
+      default:
+        break;
+    }
+
+    return { color, opacity, emissiveIntensity };
+  }, [activeState, isHighlighted, isHoverSel, region.color]);
+
+  useFrame(({ clock }) => {
+    if (materialRef.current) {
+      if (activeState === 'Flow' && isHighlighted) {
+        materialRef.current.emissiveIntensity =
+          0.6 + Math.sin(clock.getElapsedTime() * 4) * 0.3;
+      } else {
+        materialRef.current.emissiveIntensity = style.emissiveIntensity;
+      }
+    }
+  });
+
+  return (
+    <group position={region.position}>
+      <mesh
+        name="region-hitbox"
+        visible={false}
+        onPointerOver={() => setHovered(region.id)}
+        onPointerOut={() => setHovered(null)}
+        onClick={() => setSelected(region.id)}
+      >
+        <sphereGeometry args={[0.15, 32, 32]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+      <mesh>
+        <sphereGeometry args={[0.18, 32, 32]} />
+        <meshStandardMaterial
+          ref={materialRef}
+          color={style.color}
+          transparent
+          opacity={style.opacity}
+          emissive={style.color}
+          emissiveIntensity={style.emissiveIntensity}
+        />
+      </mesh>
+      {(hovered === region.id || selected === region.id) && (
+        <Html distanceFactor={10} className="pointer-events-none">
+          <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-xs">
+            <strong>{region.name}</strong>
+            <br />
+            {region.role}
+            {region.tooltip && <p className="mt-1">{region.tooltip}</p>}
+          </div>
+        </Html>
+      )}
+    </group>
+  );
+}
+
+export function BrainMap({ activeState }: BrainMapProps) {
   const [regions, setRegions] = useState<Region[]>([]);
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
@@ -118,48 +247,15 @@ export function BrainMap({ activeState: _activeState }: BrainMapProps) {
               scale={1.2}
             />
             {regions.map((region) => (
-              <group key={region.id} position={region.position}>
-                <mesh
-                  name="region-hitbox"
-                  visible={false}
-                  onPointerOver={() => setHovered(region.id)}
-                  onPointerOut={() => setHovered(null)}
-                  onClick={() => setSelected(region.id)}
-                >
-                  <sphereGeometry args={[0.15, 32, 32]} />
-                  <meshBasicMaterial transparent opacity={0} />
-                </mesh>
-                <mesh>
-                  <sphereGeometry args={[0.18, 32, 32]} />
-                  <meshStandardMaterial
-                    color={region.color}
-                    transparent
-                    opacity={
-                      hovered === region.id || selected === region.id
-                        ? 0.6
-                        : 0.25
-                    }
-                    emissive={region.color}
-                    emissiveIntensity={
-                      hovered === region.id || selected === region.id
-                        ? 0.4
-                        : 0.1
-                    }
-                  />
-                </mesh>
-                {(hovered === region.id || selected === region.id) && (
-                  <Html distanceFactor={10} className="pointer-events-none">
-                    <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-xs">
-                      <strong>{region.name}</strong>
-                      <br />
-                      {region.role}
-                      {region.tooltip && (
-                        <p className="mt-1">{region.tooltip}</p>
-                      )}
-                    </div>
-                  </Html>
-                )}
-              </group>
+              <RegionMarker
+                key={region.id}
+                region={region}
+                activeState={activeState}
+                hovered={hovered}
+                selected={selected}
+                setHovered={setHovered}
+                setSelected={setSelected}
+              />
             ))}
           </Suspense>
           <OrbitControls enablePan enableZoom enableRotate />
