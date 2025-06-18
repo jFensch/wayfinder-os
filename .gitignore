@@ -96,6 +96,10 @@ __tests__/coverage/
 # Storybook build outputs
 storybook-static/
 
+# 3D models and generated data
+public/models/*.glb
+public/brain-map.json
+
 # Local development
 .turbo/
 .vercel/

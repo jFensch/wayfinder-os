@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "npm run generate-brain && vite",
+    "build": "bun run generate-brain && vite build",
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -19,14 +19,17 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "type-check": "tsc --noEmit",
     "pre-commit": "bun run type-check && bun run lint && bun run format:check && bun run test:run",
-    "ci": "bun run type-check && bun run lint && bun run test:ci && bun run build"
+    "ci": "bun run generate-brain && bun run type-check && bun run lint && bun run test:ci && bun run build",
+    "generate-brain": "node scripts/generate-brain-model.js",
+    "clean-generated": "rm -f public/brain-map.json public/models/brain.glb"
   },
   "dependencies": {
+    "@react-three/drei": "^9.48.1",
+    "@react-three/fiber": "^8.13.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@react-three/fiber": "^8.13.2",
-    "@react-three/drei": "^9.48.1",
-    "three": "^0.159.0"
+    "three": "^0.159.0",
+    "three-stdlib": "^2.36.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
