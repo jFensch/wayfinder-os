@@ -187,3 +187,8 @@ bun run test:ui
 - Configuration in `vitest.config.ts`
 
 ---
+
+## 📚 Documentation
+
+Additional references live in the [docs/](docs/) folder, including ADRs,
+requirements, and architecture diagrams.
