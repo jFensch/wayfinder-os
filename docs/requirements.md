@@ -25,3 +25,4 @@ The initial release of Wayfinder OS aims to provide an interactive visualization
 - The application is written in TypeScript and styled using Tailwind CSS.
 - Tests use Vitest and Testing Library.
 - Visualization layout is responsive so the neural map fills available space.
+- Tooltips remain legible at different zoom levels.

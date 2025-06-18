@@ -52,7 +52,7 @@ export function BrainMap({ activeState }: BrainMapProps) {
       onClick={() => setSelected(null)}
       onKeyDown={(e) => e.key === 'Escape' && setSelected(null)}
     >
-      <h2 className="text-xl font-semibold mb-2">Neural Visualization</h2>
+      <h2 className="text-2xl font-semibold mb-2">Neural Visualization</h2>
       <div
         role="presentation"
         className="flex-1"
@@ -113,7 +113,7 @@ export function BrainMap({ activeState }: BrainMapProps) {
                       distanceFactor={4}
                       className="pointer-events-none"
                     >
-                      <div className="bg-black bg-opacity-75 text-white text-xs p-1 rounded max-w-xs">
+                      <div className="bg-black bg-opacity-75 text-white text-sm p-2 rounded max-w-sm">
                         <strong>{region.name}</strong>
                         <br />
                         {region.role}
@@ -132,7 +132,7 @@ export function BrainMap({ activeState }: BrainMapProps) {
       </div>
       {selectedRegion && (
         <div
-          className="absolute top-4 right-4 bg-gray-900 bg-opacity-80 p-4 rounded w-56 text-sm"
+          className="absolute top-4 right-4 bg-gray-900 bg-opacity-80 p-4 rounded w-64 text-base"
           role="button"
           tabIndex={0}
           onClick={(e) => e.stopPropagation()}
@@ -141,10 +141,10 @@ export function BrainMap({ activeState }: BrainMapProps) {
           <h3 className="text-lg font-semibold">{selectedRegion.name}</h3>
           <p className="mt-1">{selectedRegion.role}</p>
           {selectedRegion.tooltip && (
-            <p className="mt-2 text-xs">{selectedRegion.tooltip}</p>
+            <p className="mt-2 text-sm">{selectedRegion.tooltip}</p>
           )}
           <button
-            className="mt-3 text-xs underline text-teal-400"
+            className="mt-3 text-sm underline text-teal-400"
             onClick={() => setSelected(null)}
           >
             Deselect
