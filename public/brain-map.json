@@ -5,6 +5,7 @@
       "name": "Prefrontal Cortex",
       "role": "Planning, Decision-Making",
       "color": "#3B82F6",
+      "position": [0.8, 0.4, 1.0],
       "tooltip": "The captain's bridge — calculating every move, weighing every path."
     },
     {
@@ -12,13 +13,23 @@
       "name": "Amygdala",
       "role": "Emotional Regulation, Fear",
       "color": "#EF4444",
+      "position": [0.0, 0.2, 0.2],
       "tooltip": "The ancient alarm bell — it rings before you even know why."
+    },
+    {
+      "id": "cerebellum",
+      "name": "Cerebellum",
+      "role": "Coordination, Balance",
+      "color": "#22D3EE",
+      "position": [-0.8, -0.3, -1.0],
+      "tooltip": "Keeps you steady on your feet and guides fluid motion."
     },
     {
       "id": "dmn",
       "name": "Default Mode Network",
       "role": "Daydreaming, Self-Reflection",
       "color": "#8B5CF6",
+      "position": [0.0, 0.6, 0.0],
       "tooltip": "The echo chamber of identity — where memory and imagination dance."
     },
     {
@@ -26,6 +37,7 @@
       "name": "Insula",
       "role": "Emotional Awareness",
       "color": "#10B981",
+      "position": [0.4, -0.1, 0.0],
       "tooltip": "The inward tide — sensing the rhythm beneath thought."
     },
     {
@@ -33,6 +45,7 @@
       "name": "Basal Ganglia",
       "role": "Pattern Recognition, Routines",
       "color": "#F59E0B",
+      "position": [0.0, -0.2, 0.0],
       "tooltip": "The ritual keeper — guardian of grooves and learned paths."
     }
   ]

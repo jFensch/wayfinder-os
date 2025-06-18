@@ -96,6 +96,9 @@ __tests__/coverage/
 # Storybook build outputs
 storybook-static/
 
+# 3D models
+public/models/*.glb
+
 # Local development
 .turbo/
 .vercel/
