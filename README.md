@@ -1,3 +1,7 @@
+[![Deploy Status](https://vercel.com/jFensch/wayfinder-os/badge.svg)](https://wayfinder-j9mq6eejf-jeremys-projects-f2e94c9c.vercel.app)
+
+**Live Demo:** https://wayfinder-j9mq6eejf-jeremys-projects-f2e94c9c.vercel.app
+
 # 🧠 Wayfinder OS
 
 **A Live Neural Map of a Poetic Systems Engineer**
@@ -8,7 +12,7 @@ Wayfinder OS is an interactive web demo that visualizes the lived experience of 
 
 ## 🚀 Live Demo
 
-[https://wayfinder-os.vercel.app](https://wayfinder-os.vercel.app) (TODO)
+[https://wayfinder-j9mq6eejf-jeremys-projects-f2e94c9c.vercel.app](https://wayfinder-j9mq6eejf-jeremys-projects-f2e94c9c.vercel.app)
 
 ---
 
