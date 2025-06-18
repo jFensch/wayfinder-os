@@ -18,7 +18,7 @@ type BrainMapProps = {
   activeState: string;
 };
 
-function BrainPoints({
+export function BrainPoints({
   count = 5000,
   activeState,
 }: {
