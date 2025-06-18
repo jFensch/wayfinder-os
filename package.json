@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npm run generate-brain && vite",
+    "dev": "bun run generate-brain && vite",
     "build": "bun run generate-brain && vite build",
     "preview": "vite preview",
     "test": "vitest",
