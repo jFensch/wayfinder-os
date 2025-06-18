@@ -10,8 +10,8 @@ The initial release of Wayfinder OS aims to provide an interactive visualization
    - *As a visitor,* I expect brain regions to resize, recolor and pulse to reflect the selected state.
 3. **State-driven highlights**
    - *As a visitor,* I see different regions emphasized depending on the selected state (e.g., Amygdala in "Anxious", Frontal Lobes in "Flow").
-4. **Informative tooltips**
-   - *As a visitor,* I want to hover over a region and read a short description that poetically explains its role.
+4. **Region name tooltips**
+   - *As a visitor,* I want to hover over a region and see its name so I can quickly identify it. The full description appears when I click.
 5. **Display region details**
    - *As a visitor,* I want to click on a brain region and see its name, role, and a detailed description in a dedicated panel.
 6. **Clear selection**

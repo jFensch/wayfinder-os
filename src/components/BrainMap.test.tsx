@@ -66,7 +66,7 @@ describe('BrainMap', () => {
     fireEvent.pointerOver(mesh!);
 
     expect(screen.getByText('Amygdala')).toBeInTheDocument();
-    expect(screen.getByText('fear center')).toBeInTheDocument();
+    expect(screen.queryByText('fear center')).not.toBeInTheDocument();
   });
 
   it('displays info panel on click and hides on deselect', async () => {

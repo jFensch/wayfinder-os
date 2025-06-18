@@ -115,11 +115,6 @@ export function BrainMap({ activeState }: BrainMapProps) {
                     >
                       <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-sm break-words">
                         <strong>{region.name}</strong>
-                        <br />
-                        {region.role}
-                        {region.tooltip && (
-                          <p className="mt-1">{region.tooltip}</p>
-                        )}
                       </div>
                     </Html>
                   )}
