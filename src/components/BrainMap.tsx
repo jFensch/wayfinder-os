@@ -45,15 +45,19 @@ export function BrainMap({ activeState }: BrainMapProps) {
 
   return (
     <div
-      className="bg-gray-800 p-6 rounded shadow-xl h-96 relative"
+      className="bg-gray-800 p-6 rounded shadow-xl h-[32rem] relative flex flex-col"
       role="button"
       tabIndex={0}
       onClick={() => setSelected(null)}
       onKeyDown={(e) => e.key === 'Escape' && setSelected(null)}
     >
       <h2 className="text-xl font-semibold mb-2">Neural Visualization</h2>
-      <div role="presentation" onClick={(e) => e.stopPropagation()}>
-        <Canvas camera={{ position: [0, 0, 3] }}>
+      <div
+        role="presentation"
+        className="flex-1"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Canvas className="w-full h-full" camera={{ position: [0, 0, 3] }}>
           <ambientLight intensity={0.6} />
           <hemisphereLight intensity={0.4} groundColor="black" />
           <directionalLight position={[5, 5, 5]} intensity={0.8} />
@@ -103,8 +107,12 @@ export function BrainMap({ activeState }: BrainMapProps) {
                     />
                   </mesh>
                   {(hovered === region.id || selected === region.id) && (
-                    <Html distanceFactor={10} className="pointer-events-none">
-                      <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-xs">
+                    <Html
+                      sprite
+                      distanceFactor={4}
+                      className="pointer-events-none"
+                    >
+                      <div className="bg-black bg-opacity-75 text-white text-xs p-1 rounded max-w-xs">
                         <strong>{region.name}</strong>
                         <br />
                         {region.role}

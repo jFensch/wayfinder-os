@@ -29,6 +29,7 @@ Wayfinder OS is an interactive web demo that visualizes the lived experience of 
   - **Shutdown**: Overall brain activity is significantly dimmed.
 - **Bun-Powered**: Fast startup and development with Bun, React, TypeScript, and Tailwind.
 - **Optimized Bundles**: Heavy 3D components load lazily to keep initial downloads small.
+- **Responsive Visualization**: Tooltips remain readable and the neural map fills its container.
 
 ---
 
