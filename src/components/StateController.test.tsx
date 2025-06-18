@@ -6,7 +6,7 @@ describe('StateController', () => {
   it('calls setActiveState when a button is clicked', () => {
     const setActiveState = vi.fn();
     render(<StateController activeState="Flow" setActiveState={setActiveState} />);
-    fireEvent.click(screen.getByText('Anxious'));
+    userEvent.click(screen.getByText('Anxious'));
     expect(setActiveState).toHaveBeenCalledWith('Anxious');
   });
 });
