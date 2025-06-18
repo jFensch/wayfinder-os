@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { BrainMap } from './BrainMap';
 
@@ -7,6 +7,7 @@ vi.mock('@react-three/fiber', () => ({
   Canvas: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
+  useFrame: vi.fn(),
 }));
 
 vi.mock('@react-three/drei', () => ({
@@ -35,5 +36,36 @@ describe('BrainMap', () => {
       expect(fetchMock).toHaveBeenCalledWith('/brain-map.json');
     });
     expect(screen.getByText('Neural Visualization')).toBeInTheDocument();
+  });
+
+  it('shows tooltip on hover', async () => {
+    fetchMock.mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          regions: [
+            {
+              id: 'r1',
+              name: 'Amygdala',
+              role: 'emotion',
+              color: '#f00',
+              position: [0, 0, 0],
+              tooltip: 'fear center',
+            },
+          ],
+        }),
+    });
+    const { container } = render(<BrainMap activeState="Calm" />);
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalled();
+    });
+
+    const mesh = container.querySelector('mesh[name="region-hitbox"]');
+    expect(mesh).toBeTruthy();
+    if (mesh) {
+      fireEvent.pointerOver(mesh);
+    }
+
+    expect(screen.getByText('Amygdala')).toBeInTheDocument();
+    expect(screen.getByText('fear center')).toBeInTheDocument();
   });
 });

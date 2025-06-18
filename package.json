@@ -29,7 +29,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.159.0",
-    "three-stdlib": "^2.36.0"
+    "three-stdlib": "^2.36.0",
+    "threejs-brain-animation": "^1.4.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
