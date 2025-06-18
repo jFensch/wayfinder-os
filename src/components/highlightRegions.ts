@@ -1,4 +1,5 @@
-export type BrainState = 'Flow' | 'Anxious' | 'Sad' | 'Shutdown';
+export const brainStates = ['Flow', 'Anxious', 'Sad', 'Shutdown'] as const;
+export type BrainState = (typeof brainStates)[number];
 
 export const highlightRegions: Record<BrainState, string[]> = {
   Anxious: ['leftAmygdala', 'rightAmygdala'],
