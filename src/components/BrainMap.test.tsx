@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import * as THREE from 'three';
 import { BrainMap } from './BrainMap';
 
 vi.mock('@react-three/fiber', () => ({
@@ -10,11 +11,32 @@ vi.mock('@react-three/fiber', () => ({
   useFrame: vi.fn(),
 }));
 
-vi.mock('@react-three/drei', () => ({
-  OrbitControls: () => null,
-  Html: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  useGLTF: Object.assign(() => ({ scene: {} }), { preload: vi.fn() }),
-}));
+vi.mock('@react-three/drei', () => {
+  return {
+    OrbitControls: () => null,
+    Html: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
+    useGLTF: Object.assign(
+      () => {
+        const scene = new THREE.Group();
+        ['r1', 'r2'].forEach((name) => {
+          const mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(),
+            new THREE.MeshStandardMaterial()
+          );
+          mesh.name = name;
+          scene.add(mesh);
+        });
+        scene.traverse = (fn: (obj: THREE.Object3D) => void) => {
+          scene.children.forEach(fn);
+        };
+        return { scene };
+      },
+      { preload: vi.fn() }
+    ),
+  };
+});
 
 describe('BrainMap', () => {
   const fetchMock = vi.fn();
@@ -60,7 +82,7 @@ describe('BrainMap', () => {
     });
 
     const mesh = await waitFor(() =>
-      container.querySelector('mesh[name="region-hitbox"]')
+      container.querySelector('[data-testid="mesh-r1"]')
     );
     expect(mesh).toBeTruthy();
     fireEvent.pointerOver(mesh!);
@@ -92,7 +114,7 @@ describe('BrainMap', () => {
     });
 
     const mesh = await waitFor(() =>
-      container.querySelector('mesh[name="region-hitbox"]')
+      container.querySelector('[data-testid="mesh-r2"]')
     );
     expect(mesh).toBeTruthy();
     fireEvent.click(mesh!);

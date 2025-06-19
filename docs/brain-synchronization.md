@@ -91,8 +91,6 @@ When adding new brain components:
 
 ## Usage in Components
 
-The BrainMap component uses both:
-- **GLB model**: Loaded via `useGLTF('/models/brain.glb')`
-- **JSON data**: Fetched from `/brain-map.json` for interactive regions
+The BrainMap component attaches pointer events directly to the meshes loaded from the GLB model. The JSON file supplies human‑friendly names and descriptions for each region.
 
-This ensures the visual 3D brain and the interactive overlay markers are perfectly aligned.
+This keeps the visual model and its metadata in sync without relying on separate overlay geometry.
