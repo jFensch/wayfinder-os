@@ -46,7 +46,7 @@ function BrainModel({
     });
   }, [gltf, highlightRegions]);
 
-  return <primitive ref={group} object={gltf.scene} />;
+  return <primitive ref={group} object={gltf.scene} scale={1.2} />;
 }
 
 /**
