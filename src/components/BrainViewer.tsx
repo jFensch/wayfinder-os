@@ -29,7 +29,9 @@ function BrainModel({
     gltf.scene.traverse((child: THREE.Object3D) => {
       const mesh = child as THREE.Mesh;
       if (mesh.isMesh) {
-        const mat = mesh.material as THREE.MeshStandardMaterial;
+        const material = mesh.material;
+        if (!(material instanceof THREE.MeshStandardMaterial)) return;
+        const mat = material;
         if (highlightRegions.includes(mesh.name)) {
           mat.emissiveIntensity = 0.8;
           mat.emissive.setHex(0xffd54f);
