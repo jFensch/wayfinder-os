@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import { Html, OrbitControls, useGLTF } from '@react-three/drei';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, ThreeEvent } from '@react-three/fiber';
 import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -9,49 +9,84 @@ const highlightMap: Record<string, string[]> = {
   Flow: ['leftFrontalLobe', 'rightFrontalLobe'],
 };
 
-const baseOpacityMap: Record<string, number> = {
-  Flow: 0.25,
-  Anxious: 0.25,
-  Sad: 0.15,
-  Shutdown: 0.1,
-};
-
 function BrainModel({
   highlightRegions = [],
+  hovered,
+  selected,
+  onHover,
+  onSelect,
 }: {
   highlightRegions?: string[];
+  hovered: string | null;
+  selected: string | null;
+  onHover: (id: string | null) => void;
+  onSelect: (id: string) => void;
 }) {
   const gltf = useGLTF('/models/brain.glb');
   const group = useRef<THREE.Group>(null);
+
+  const meshes = useMemo(() => {
+    const arr: THREE.Mesh[] = [];
+    gltf.scene.traverse((child: THREE.Object3D) => {
+      const mesh = child as THREE.Mesh;
+      if (mesh.isMesh) arr.push(mesh);
+    });
+    return arr;
+  }, [gltf]);
 
   useFrame(() => {
     if (group.current) group.current.rotation.y += 0.002;
   });
 
   useEffect(() => {
-    gltf.scene.traverse((child: THREE.Object3D) => {
-      const mesh = child as THREE.Mesh;
-      if (mesh.isMesh) {
-        const material = mesh.material;
-        if (!(material instanceof THREE.MeshStandardMaterial)) return;
-        const mat = material;
-        if (highlightRegions.includes(mesh.name)) {
-          mat.emissiveIntensity = 0.8;
-          mat.emissive.setHex(0xffd54f);
-        } else {
-          mat.emissiveIntensity = 0;
-        }
-        mat.transparent = true;
-        mat.opacity = highlightRegions.length
-          ? highlightRegions.includes(mesh.name)
-            ? 1
-            : 0.5
-          : 1;
-      }
-    });
-  }, [gltf, highlightRegions]);
+    meshes.forEach((mesh) => {
+      const material = mesh.material;
+      if (!(material instanceof THREE.MeshStandardMaterial)) return;
+      const isSelected = selected === mesh.name;
+      const isHovered = hovered === mesh.name;
+      const isState = highlightRegions.includes(mesh.name);
 
-  return <primitive ref={group} object={gltf.scene} scale={1.2} />;
+      material.emissive.setHex(0xffd54f);
+      material.emissiveIntensity = isSelected
+        ? 0.8
+        : isHovered
+          ? 0.5
+          : isState
+            ? 0.4
+            : 0;
+      material.transparent = true;
+      const baseOpacity = highlightRegions.length
+        ? highlightRegions.includes(mesh.name)
+          ? 1
+          : 0.5
+        : 1;
+      material.opacity = isSelected || isHovered ? 0.6 : baseOpacity;
+    });
+  }, [meshes, highlightRegions, hovered, selected]);
+
+  return (
+    <group ref={group} scale={1.2}>
+      {meshes.map((mesh) => (
+        <primitive
+          key={mesh.uuid}
+          object={mesh}
+          data-testid={`mesh-${mesh.name}`}
+          onPointerOver={(e: ThreeEvent<PointerEvent>) => {
+            e.stopPropagation();
+            if (mesh.name !== selected) onHover(mesh.name);
+          }}
+          onPointerOut={(e: ThreeEvent<PointerEvent>) => {
+            e.stopPropagation();
+            if (hovered === mesh.name) onHover(null);
+          }}
+          onClick={(e: ThreeEvent<MouseEvent>) => {
+            e.stopPropagation();
+            onSelect(mesh.name);
+          }}
+        />
+      ))}
+    </group>
+  );
 }
 
 type Region = {
@@ -103,85 +138,47 @@ export function BrainMap({ activeState }: BrainMapProps) {
           <directionalLight position={[5, 5, 5]} intensity={0.8} />
           <directionalLight position={[-5, -5, -5]} intensity={0.3} />
           <Suspense fallback={null}>
-            <BrainModel highlightRegions={highlightMap[activeState] ?? []} />
-            {regions.map((region) => {
-              const highlighted = highlightMap[activeState]?.includes(
-                region.id
-              );
-              const baseOpacity = baseOpacityMap[activeState] ?? 0.25;
-              return (
-                <group key={region.id} position={region.position}>
-                  <mesh
-                    name="region-hitbox"
-                    visible={false}
-                    onPointerOver={() => setHovered(region.id)}
-                    onPointerOut={() => setHovered(null)}
-                    onClick={() => setSelected(region.id)}
-                  >
-                    <sphereGeometry args={[0.15, 32, 32]} />
-                    <meshBasicMaterial transparent opacity={0} />
-                  </mesh>
-                  <mesh>
-                    <sphereGeometry args={[0.18, 32, 32]} />
-                    <meshStandardMaterial
-                      color={region.color}
-                      transparent
-                      opacity={
-                        hovered === region.id || selected === region.id
-                          ? 0.6
-                          : highlighted
-                            ? 0.5
-                            : baseOpacity
-                      }
-                      emissive={region.color}
-                      emissiveIntensity={
-                        hovered === region.id || selected === region.id
-                          ? 0.4
-                          : highlighted
-                            ? 0.6
-                            : 0.1
-                      }
-                    />
-                  </mesh>
-                  {(hovered === region.id || selected === region.id) && (
-                    <Html
-                      sprite
-                      distanceFactor={6}
-                      className="pointer-events-none"
-                    >
-                      <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-sm break-words">
-                        <strong>{region.name}</strong>
-                      </div>
-                    </Html>
-                  )}
-                </group>
-              );
-            })}
+            <BrainModel
+              highlightRegions={highlightMap[activeState] ?? []}
+              hovered={hovered}
+              selected={selected}
+              onHover={setHovered}
+              onSelect={(id) => setSelected(id)}
+            />
+            {hovered && !selected && (
+              <Html sprite distanceFactor={6} className="pointer-events-none">
+                <div className="bg-black bg-opacity-75 text-white text-xs p-2 rounded max-w-sm break-words">
+                  <strong>{regions.find((r) => r.id === hovered)?.name}</strong>
+                </div>
+              </Html>
+            )}
           </Suspense>
           <OrbitControls enablePan enableZoom enableRotate />
         </Canvas>
       </div>
-      {selectedRegion && (
-        <div
-          className="absolute top-4 right-4 bg-gray-900 bg-opacity-80 p-4 rounded w-64 text-base"
-          role="button"
-          tabIndex={0}
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => e.key === 'Escape' && setSelected(null)}
-        >
-          <h3 className="text-lg font-semibold">{selectedRegion.name}</h3>
-          <p className="mt-1">{selectedRegion.role}</p>
-          {selectedRegion.tooltip && (
-            <p className="mt-2 text-sm">{selectedRegion.tooltip}</p>
-          )}
-          <button
-            className="mt-3 text-sm underline text-teal-400"
-            onClick={() => setSelected(null)}
-          >
-            Deselect
-          </button>
-        </div>
-      )}
+      <div
+        className={`absolute top-4 right-4 bg-gray-900 bg-opacity-80 p-4 rounded w-64 text-base transform transition-transform duration-300 ${selectedRegion ? 'translate-x-0' : 'translate-x-full pointer-events-none'}`}
+        role="button"
+        tabIndex={0}
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.key === 'Escape' && setSelected(null)}
+      >
+        {selectedRegion && (
+          <>
+            <h3 className="text-lg font-semibold">{selectedRegion.name}</h3>
+            <p className="mt-1">{selectedRegion.role}</p>
+            {selectedRegion.tooltip && (
+              <p className="mt-2 text-sm">{selectedRegion.tooltip}</p>
+            )}
+            <button
+              className="mt-3 text-sm underline text-teal-400"
+              onClick={() => setSelected(null)}
+            >
+              Deselect
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
