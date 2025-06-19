@@ -1,12 +1,6 @@
 import React, { Suspense } from 'react';
 const BrainMap = React.lazy(() => import('./components/BrainMap'));
-const BrainViewer = React.lazy(() => import('@/components/BrainViewer'));
 import { StateController } from './components/StateController';
-
-const highlightMap: Record<string, string[]> = {
-  Anxious: ['leftAmygdala', 'rightAmygdala'],
-  Flow: ['leftFrontalLobe', 'rightFrontalLobe'],
-};
 
 export default function App() {
   const [activeState, setActiveState] = React.useState('Flow');
@@ -22,7 +16,6 @@ export default function App() {
       />
       <Suspense fallback={<div>Loading...</div>}>
         <BrainMap activeState={activeState} />
-        <BrainViewer highlightedRegions={highlightMap[activeState] ?? []} />
       </Suspense>
     </div>
   );

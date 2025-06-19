@@ -1,7 +1,8 @@
 /* eslint-disable react/no-unknown-property */
 import { Html, OrbitControls, useGLTF } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useState, useMemo } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
+import * as THREE from 'three';
 
 const highlightMap: Record<string, string[]> = {
   Anxious: ['leftAmygdala', 'rightAmygdala'],
@@ -14,6 +15,44 @@ const baseOpacityMap: Record<string, number> = {
   Sad: 0.15,
   Shutdown: 0.1,
 };
+
+function BrainModel({
+  highlightRegions = [],
+}: {
+  highlightRegions?: string[];
+}) {
+  const gltf = useGLTF('/models/brain.glb');
+  const group = useRef<THREE.Group>(null);
+
+  useFrame(() => {
+    if (group.current) group.current.rotation.y += 0.002;
+  });
+
+  useEffect(() => {
+    gltf.scene.traverse((child: THREE.Object3D) => {
+      const mesh = child as THREE.Mesh;
+      if (mesh.isMesh) {
+        const material = mesh.material;
+        if (!(material instanceof THREE.MeshStandardMaterial)) return;
+        const mat = material;
+        if (highlightRegions.includes(mesh.name)) {
+          mat.emissiveIntensity = 0.8;
+          mat.emissive.setHex(0xffd54f);
+        } else {
+          mat.emissiveIntensity = 0;
+        }
+        mat.transparent = true;
+        mat.opacity = highlightRegions.length
+          ? highlightRegions.includes(mesh.name)
+            ? 1
+            : 0.5
+          : 1;
+      }
+    });
+  }, [gltf, highlightRegions]);
+
+  return <primitive ref={group} object={gltf.scene} scale={1.2} />;
+}
 
 type Region = {
   id: string;
@@ -64,10 +103,7 @@ export function BrainMap({ activeState }: BrainMapProps) {
           <directionalLight position={[5, 5, 5]} intensity={0.8} />
           <directionalLight position={[-5, -5, -5]} intensity={0.3} />
           <Suspense fallback={null}>
-            <primitive
-              object={useGLTF('/models/brain.glb').scene}
-              scale={1.2}
-            />
+            <BrainModel highlightRegions={highlightMap[activeState] ?? []} />
             {regions.map((region) => {
               const highlighted = highlightMap[activeState]?.includes(
                 region.id

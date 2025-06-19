@@ -13,7 +13,9 @@ vi.mock('@react-three/fiber', () => ({
 vi.mock('@react-three/drei', () => ({
   OrbitControls: () => null,
   Html: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  useGLTF: Object.assign(() => ({ scene: {} }), { preload: vi.fn() }),
+  useGLTF: Object.assign(() => ({ scene: { traverse: vi.fn() } }), {
+    preload: vi.fn(),
+  }),
 }));
 
 describe('BrainMap', () => {
